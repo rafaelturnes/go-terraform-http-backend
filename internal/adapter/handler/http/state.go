@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -9,28 +10,48 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func fetch(c *gin.Context) {
+func (s *Server) fetch(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Printf("REQUEST:\n%s", string(reqDump))
+	id := c.Param("id")
 
-	c.String(http.StatusOK, "get state", nil)
+	reader, err := s.stateSVC.Fetch(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, nil)
+	}
+
+	state, err := io.ReadAll(reader)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, nil)
+		return
+	}
+
+	c.String(http.StatusOK, string(state))
 }
 
-func update(c *gin.Context) {
+func (s *Server) update(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("REQUEST:\n%s", string(reqDump))
 
-	c.String(http.StatusOK, "update state", nil)
+	id := c.Param("id")
+
+	err = s.stateSVC.Update(id, c.Request.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, nil)
+		return
+	}
+
+	c.Status(http.StatusOK)
 }
 
-func purge(c *gin.Context) {
+func (s *Server) purge(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)

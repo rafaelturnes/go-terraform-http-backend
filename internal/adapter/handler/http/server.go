@@ -1,16 +1,22 @@
 package http
 
-import "github.com/gin-gonic/gin"
+import (
+	"go-terraform-http-backend/internal/core/port"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Server struct {
-	http *gin.Engine
+	http     *gin.Engine
+	stateSVC port.StateService
 }
 
-func NewServer() *Server {
+func NewServer(stateSVC port.StateService) *Server {
 	r := gin.Default()
 
 	return &Server{
-		http: r,
+		http:     r,
+		stateSVC: stateSVC,
 	}
 }
 
@@ -18,13 +24,13 @@ func (s *Server) Routes() {
 
 	// state
 	// fetched via GET, updated via POST, and purged with DELETE
-	s.http.GET("/state", fetch)
-	s.http.POST("/state", update)
-	s.http.DELETE("/state", purge)
+	s.http.GET("/state/:id", s.fetch)
+	s.http.POST("/state/:id", s.update)
+	s.http.DELETE("/state/:id", s.purge)
 
 	// state locking
-	s.http.Handle("LOCK", "/state", lock)
-	s.http.Handle("UNLOCK", "/state", unlock)
+	s.http.Handle("LOCK", "/state/:id", s.lock)
+	s.http.Handle("UNLOCK", "/state/:id", s.unlock)
 
 }
 
