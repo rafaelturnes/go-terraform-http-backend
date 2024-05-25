@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Server) lock(c *gin.Context) {
+func (s *Server) stateLock(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)
@@ -35,7 +35,7 @@ func (s *Server) lock(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (s *Server) unlock(c *gin.Context) {
+func (s *Server) stateUnlock(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)

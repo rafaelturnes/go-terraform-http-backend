@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Server) fetch(c *gin.Context) {
+func (s *Server) stateFetch(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)
@@ -33,7 +33,7 @@ func (s *Server) fetch(c *gin.Context) {
 	c.String(http.StatusOK, string(state))
 }
 
-func (s *Server) update(c *gin.Context) {
+func (s *Server) stateUpdate(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)
@@ -51,7 +51,8 @@ func (s *Server) update(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (s *Server) purge(c *gin.Context) {
+// TODO
+func (s *Server) statePurge(c *gin.Context) {
 	reqDump, err := httputil.DumpRequest(c.Request, true)
 	if err != nil {
 		log.Fatal(err)

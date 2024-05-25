@@ -24,13 +24,13 @@ func (s *Server) Routes() {
 
 	// state
 	// fetched via GET, updated via POST, and purged with DELETE
-	s.http.GET("/state/:id", s.fetch)
-	s.http.POST("/state/:id", s.update)
-	s.http.DELETE("/state/:id", s.purge)
+	s.http.GET("/state/:id", s.stateFetch)
+	s.http.POST("/state/:id", s.stateUpdate)
+	s.http.DELETE("/state/:id", s.statePurge)
 
 	// state locking
-	s.http.Handle("LOCK", "/state/:id", s.lock)
-	s.http.Handle("UNLOCK", "/state/:id", s.unlock)
+	s.http.Handle("LOCK", "/state/:id", s.stateLock)
+	s.http.Handle("UNLOCK", "/state/:id", s.stateUnlock)
 
 }
 
