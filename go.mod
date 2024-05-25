@@ -2,7 +2,10 @@ module go-terraform-http-backend
 
 go 1.22.3
 
-require github.com/gin-gonic/gin v1.10.0
+require (
+	github.com/gin-contrib/multitemplate v1.0.1
+	github.com/gin-gonic/gin v1.10.0
+)
 
 require (
 	github.com/bytedance/sonic v1.11.7 // indirect

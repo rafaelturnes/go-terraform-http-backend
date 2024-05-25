@@ -1,0 +1,21 @@
+{{define "title"}}States{{end}}
+{{define "content"}}
+<title>{{ .title }}</title>
+
+<div class="row">
+    <div class="col s4 offset-s4">
+        {{ if .states }}
+        <ul class="collection">
+            {{ range .states}}              
+            <li class="collection-item avatar">
+                {{if .Lock }}<i class="material-icons circle red darken-3">lock</i>{{else}}<i class="material-icons circle green darken-2">lock_open</i>{{end}}
+                <span class="title">{{.ID}}</span>
+                <p>locked: {{.Lock}}</p>
+                <a href="/debug/state/{{.ID}}" class="secondary-content"><i class="material-icons pink-text text-darken-4">open_in_new</i></a>
+            </li>
+            {{end}}
+        </ul>
+        {{end}}
+    </div>
+</div>
+{{end}}

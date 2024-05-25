@@ -28,6 +28,7 @@ func (s *StateStorage) Get(id string) (io.Reader, error) {
 
 	return reader, nil
 }
+
 func (s *StateStorage) Update(id string, state io.Reader) error {
 	bs, err := io.ReadAll(state)
 	if err != nil {
@@ -75,8 +76,8 @@ func (s *StateStorage) Lock(id string) error {
 	s.data[id] = state
 
 	return nil
-
 }
+
 func (s *StateStorage) Unlock(id string) error {
 	if !s.HasState(id) {
 		return storage.ErrNotExists
@@ -107,4 +108,35 @@ func (s *StateStorage) HasState(id string) bool {
 		return true
 	}
 	return false
+}
+
+func (s *StateStorage) GetAllStateInfo() ([]domain.StateInfo, error) {
+	if len(s.data) == 0 {
+		return nil, storage.ErrNotExists
+	}
+
+	states := []domain.StateInfo{}
+	for k, v := range s.data {
+		state := domain.StateInfo{
+			Lock: v.Lock,
+			ID:   k,
+		}
+		states = append(states, state)
+	}
+
+	return states, nil
+}
+
+func (s *StateStorage) GetAllIDs() ([]string, error) {
+	if len(s.data) == 0 {
+		return nil, storage.ErrNotExists
+	}
+
+	ids := []string{}
+	for k := range s.data {
+
+		ids = append(ids, k)
+	}
+
+	return ids, nil
 }

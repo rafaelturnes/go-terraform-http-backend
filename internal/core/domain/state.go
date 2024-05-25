@@ -8,10 +8,11 @@ type State struct {
 	Data []byte
 }
 
-// type DefaultState struct {
-// 	Version int `json:"version"`
-// }
-
 var (
 	InitialState = `{"Version": 1}`
 )
+
+type StateInfo struct {
+	Lock bool
+	ID   string
+}

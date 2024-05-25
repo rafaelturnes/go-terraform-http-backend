@@ -56,3 +56,31 @@ func (s *State) Unlock(id string) error {
 func (s *State) IsLocked(id string) bool {
 	return s.storage.IsLocked(id)
 }
+
+func (s *State) GetAllIDs() ([]string, error) {
+	ids, err := s.storage.GetAllIDs()
+	if err != nil {
+		switch {
+		case errors.Is(err, storage.ErrNotExists):
+			return []string{}, nil
+		default:
+			return nil, err
+		}
+	}
+
+	return ids, nil
+}
+
+func (s *State) GetAllStateInfo() ([]domain.StateInfo, error) {
+	states, err := s.storage.GetAllStateInfo()
+	if err != nil {
+		switch {
+		case errors.Is(err, storage.ErrNotExists):
+			return []domain.StateInfo{}, nil
+		default:
+			return nil, err
+		}
+	}
+
+	return states, nil
+}

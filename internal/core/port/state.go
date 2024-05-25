@@ -1,6 +1,7 @@
 package port
 
 import (
+	"go-terraform-http-backend/internal/core/domain"
 	"io"
 )
 
@@ -14,6 +15,9 @@ type StateStorage interface {
 	Lock(id string) error
 	Unlock(id string) error
 	IsLocked(id string) bool
+
+	GetAllIDs() ([]string, error)
+	GetAllStateInfo() ([]domain.StateInfo, error)
 }
 
 type StateService interface {
@@ -26,4 +30,8 @@ type StateService interface {
 	Fetch(id string) (io.Reader, error)
 	Update(id string, state io.Reader) error
 	Delete(int string) error
+
+	//
+	GetAllIDs() ([]string, error)
+	GetAllStateInfo() ([]domain.StateInfo, error)
 }

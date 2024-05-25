@@ -13,6 +13,8 @@ func main() {
 	stateSVC := service.NewStateService(stateStorage)
 
 	server := http.NewServer(stateSVC)
+
 	server.Routes()
+
 	server.Run()
 }
